@@ -1,0 +1,7 @@
+from debian:latest
+
+VOLUME ["/schani_auth"]
+
+EXPOSE 8000
+
+ENTRYPOINT ["/schani_auth/schani_auth"]
