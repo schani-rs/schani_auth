@@ -1,4 +1,4 @@
-# Schani Auth
+Schani Auth
 
 ## API
 
@@ -9,7 +9,7 @@ Verify a username-password combination and get a new JWT on success. `username` 
 ``POST /authenticate``
 
 ```bash
-curl http://127.0.0.1:7878/authenticate?username=a\&password=123456
+curl http://127.0.0.1:8000/authenticate?username=a\&password=123456
 ```
 
 ### Verify token
@@ -19,5 +19,5 @@ Verify that a token is (still) valid. This returns 200 if the token is valid and
 ``POST /verify/<token>``
 
 ```bash
-curl -v -X POST http://127.0.0.1:7878/verify/eyJ0eXAiOiJKV1QiLCJraWQiOm51bGwsImFsZyI6IkhTMjU2In0.eyJpc3MiOiJzY2hhbmktcnMiLCJzdWIiOiJ0ZXN0IiwiYXVkIjpudWxsLCJleHAiOm51bGwsIm5iZiI6bnVsbCwiaWF0IjpudWxsLCJqdGkiOm51bGx9.U40p4ITqOFW9jdurBbHDyGoQxkR0y3unwMiifntWMOc
+curl -v -X POST http://127.0.0.1:8000/verify/eyJ0eXAiOiJKV1QiLCJraWQiOm51bGwsImFsZyI6IkhTMjU2In0.eyJpc3MiOiJzY2hhbmktcnMiLCJzdWIiOiJ0ZXN0IiwiYXVkIjpudWxsLCJleHAiOm51bGwsIm5iZiI6bnVsbCwiaWF0IjpudWxsLCJqdGkiOm51bGx9.U40p4ITqOFW9jdurBbHDyGoQxkR0y3unwMiifntWMOc
 ```

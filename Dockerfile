@@ -1,8 +1,10 @@
-from debian:latest
+FROM rust:1.19.0
+WORKDIR /usr/src/myapp
+COPY . .
+RUN cargo build --release
 
-COPY target/release/schani_auth /usr/local/bin
-
+FROM debian:latest
+COPY --from=0 /usr/src/myapp/target/release/schani_auth /usr/local/bin
 EXPOSE 8000
-
 ENTRYPOINT ["/usr/local/bin/schani_auth"]
 
