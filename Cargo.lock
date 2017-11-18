@@ -414,6 +414,8 @@ name = "schani_auth"
 version = "0.2.0"
 dependencies = [
  "fern 0.4.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "futures 0.1.17 (registry+https://github.com/rust-lang/crates.io-index)",
+ "futures-cpupool 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "gotham 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "gotham_derive 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "hyper 0.11.7 (registry+https://github.com/rust-lang/crates.io-index)",

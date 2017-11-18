@@ -1,17 +1,22 @@
 use std::io;
 
 use fern;
+use futures_cpupool::CpuPool;
 use gotham::handler::NewHandlerService;
 use hyper::server::Http;
 use log::{self, LogLevelFilter};
 
 use super::routing::router;
 
-pub struct AuthService;
+pub struct AuthService {
+    pool: CpuPool,
+}
 
 impl AuthService {
     pub fn new() -> Self {
-        AuthService {}
+        AuthService {
+            pool: CpuPool::new_num_cpus(),
+        }
     }
 
     fn set_logging(&self) {
@@ -39,7 +44,7 @@ impl AuthService {
         let addr = "127.0.0.1:7878".parse().unwrap();
 
         let server = Http::new()
-            .bind(&addr, NewHandlerService::new(router()))
+            .bind(&addr, NewHandlerService::new(router(&self.pool)))
             .unwrap();
 
         server.run().unwrap();

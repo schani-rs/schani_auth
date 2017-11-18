@@ -1,5 +1,4 @@
-use hyper::Method;
-
+use futures_cpupool::CpuPool;
 use gotham::handler::NewHandler;
 use gotham::middleware::pipeline::new_pipeline;
 use gotham::router::Router;
@@ -12,9 +11,11 @@ use gotham::router::request::query_string::NoopQueryStringExtractor;
 use gotham::router::response::finalizer::ResponseFinalizerBuilder;
 use gotham::router::tree::TreeBuilder;
 use gotham::router::tree::node::{NodeBuilder, SegmentType};
+use hyper::Method;
 
 use super::extractors::{AuthenticateQueryString, VerifyRequestPath};
 use super::handler::{authenticate, verify};
+use super::middleware::ThreadPoolMiddleware;
 
 fn static_route<NH, P, C>(
     methods: Vec<Method>,
@@ -63,12 +64,15 @@ where
     Box::new(route)
 }
 
-pub fn router() -> Router {
+pub fn router(cpu_pool: &CpuPool) -> Router {
     let mut tree_builder = TreeBuilder::new();
+
+    let pool_middleware = ThreadPoolMiddleware::new(cpu_pool.clone());
 
     let ps_builder = new_pipeline_set();
     let (ps_builder, global) = ps_builder.add(
         new_pipeline()
+            .add(pool_middleware)
             .build(),
     );
     let ps = finalize_pipeline_set(ps_builder);

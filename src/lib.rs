@@ -1,5 +1,7 @@
 extern crate crypto;
 extern crate fern;
+extern crate futures;
+extern crate futures_cpupool;
 extern crate gotham;
 #[macro_use]
 extern crate gotham_derive;

@@ -5,6 +5,8 @@ authors = ["Christoph Wurst <christoph@winzerhof-wurst.at>"]
 
 [dependencies]
 fern = "*"
+futures = "*"
+futures-cpupool = "0.1.7"
 hyper = "*"
 jwt = "0.4.0"
 gotham = "0.1.2"
