@@ -1,4 +1,7 @@
-Schani Auth
+# Schani Auth
+
+[![Build Status](https://travis-ci.org/schani-rs/schani_auth.svg?branch=master)](https://travis-ci.org/schani-rs/schani_auth)
+[![Docker Automated build](https://img.shields.io/docker/automated/schanirs/auth.svg)](https://hub.docker.com/r/schanirs/auth)
 
 ## API
 
