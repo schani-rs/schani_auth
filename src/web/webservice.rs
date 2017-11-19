@@ -41,7 +41,7 @@ impl AuthService {
     pub fn run(&self) {
         self.set_logging();
 
-        let addr = "127.0.0.1:8000".parse().unwrap();
+        let addr = "0.0.0.0:8000".parse().unwrap();
 
         let server = Http::new()
             .bind(&addr, NewHandlerService::new(router(&self.pool)))
