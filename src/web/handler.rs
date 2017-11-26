@@ -1,7 +1,8 @@
 use futures::Future;
+use futures::future::{err, ok};
 use hyper::server::{Request, Response};
 use hyper::StatusCode;
-use gotham::handler::HandlerFuture;
+use gotham::handler::{HandlerFuture, IntoHandlerError};
 use gotham::http::response::create_response;
 use gotham::state::FromState;
 use gotham::state::State;
@@ -19,20 +20,17 @@ pub fn authenticate(state: State, _req: Request) -> Box<HandlerFuture> {
         pool.get_pool().spawn_fn(move || auth::authenticate(creds))
     };
 
-    let result = work.map(|jwt| {
-        let resp = create_response(
-            &state,
-            StatusCode::Ok,
-            Some((jwt.into_bytes(), mime::TEXT_PLAIN)),
-        );
-        (state, resp)
-        /*
-            let resp = create_response(&state, StatusCode::BadRequest, None);
-            (state, resp)
-        }*/
-    }).map_err(|_| {
-            unimplemented!();
-        });
+    let result = work.then(|result| match result {
+        Ok(jwt) => {
+            let resp = create_response(
+                &state,
+                StatusCode::Ok,
+                Some((jwt.into_bytes(), mime::TEXT_PLAIN)),
+            );
+            ok((state, resp))
+        }
+        Err(e) => err((state, e.into_handler_error())),
+    });
 
     Box::new(result)
 }
