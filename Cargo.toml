@@ -4,13 +4,15 @@ version = "0.2.0"
 authors = ["Christoph Wurst <christoph@winzerhof-wurst.at>"]
 
 [dependencies]
+error-chain = "0.11.0"
 fern = "*"
 futures = "*"
 futures-cpupool = "0.1.7"
 hyper = "*"
-jwt = "0.4.0"
+jsonwebtoken = "4.0.0"
 gotham = "0.1.2"
 gotham_derive = "0.1.0"
 log = "*"
 mime = "*"
-rust-crypto = "0.2.36"
+serde = "1"
+serde_derive = "1"

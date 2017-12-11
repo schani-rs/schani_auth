@@ -25,7 +25,7 @@ impl Middleware for ThreadPoolMiddleware {
         Chain: FnOnce(State, Request) -> Box<HandlerFuture> + Send + 'static,
         Self: Sized,
     {
-        state.put(ThreadPoolMiddlewareData::new(self.pool.clone()));
+        state.put(ThreadPoolMiddlewareData::new(self.pool));
 
         chain(state, request)
     }

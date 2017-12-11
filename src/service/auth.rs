@@ -1,10 +1,17 @@
-use crypto::sha2::Sha256;
 use jwt;
+
+use error::{self, ResultExt};
 
 #[derive(Debug)]
 pub struct Credentials {
     username: String,
     password: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Claims {
+    sub: String,
+    company: String,
 }
 
 impl Credentials {
@@ -17,36 +24,25 @@ impl Credentials {
 }
 
 // #[post("/authenticate", data = "<credentials>")]
-pub fn authenticate(credentials: Credentials) -> Result<String, &'static str> {
+pub fn authenticate(credentials: Credentials) -> error::Result<String> {
     // TODO: verify against userinfo service
     if credentials.password != "123456" {
-        return Err("invalid username/password");
+        return Err("invalid username/password".into());
     }
 
     let header = jwt::Header::default();
-    let claims = jwt::Registered {
-        iss: Some("schani-rs".into()),
-        sub: Some(credentials.username.to_owned()),
-        ..Default::default()
+    let claims = Claims {
+        sub: credentials.username.to_owned(),
+        company: "schani-rs".to_owned(),
     };
-    let token = jwt::Token::new(header, claims);
-
-    token
-        .signed(b"secret", Sha256::new())
-        .map_err(|_| "could not sign JWT")
+    jwt::encode(&header, &claims, "secret".as_ref()).chain_err(|| "could not sign JWT")
 }
 
 // #[post("/verify/<token>")]
-pub fn verify(token: &str) -> Result<(), &'static str> {
-    let token = try!(
-        jwt::Token::<jwt::Header, jwt::Registered>::parse(token)
-            .map_err(|_| "could not parse token")
-    );
-    if token.verify(b"secret", Sha256::new()) {
-        Ok(())
-    } else {
-        Err("token verification failed")
-    }
+pub fn verify(token: &str) -> error::Result<()> {
+    jwt::decode::<Claims>(&token, "secret".as_ref(), &jwt::Validation::default())
+        .map(|_| ())
+        .chain_err(|| "could not parse token")
 }
 
 #[cfg(test)]
@@ -71,7 +67,6 @@ mod tests {
         let result = authenticate(creds);
 
         assert!(result.is_err());
-        assert_eq!(result.unwrap_err(), "invalid username/password");
     }
 
     #[test]
