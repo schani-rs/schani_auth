@@ -4,7 +4,7 @@ use fern;
 use futures_cpupool::CpuPool;
 use gotham::handler::NewHandlerService;
 use hyper::server::Http;
-use log::{self, LogLevelFilter};
+use log::{self, LevelFilter};
 
 use super::routing::router;
 
@@ -21,10 +21,10 @@ impl AuthService {
 
     fn set_logging(&self) {
         fern::Dispatch::new()
-            .level(LogLevelFilter::Error)
-            .level_for("gotham", log::LogLevelFilter::Trace)
-            .level_for("gotham::state", log::LogLevelFilter::Error)
-            .level_for("todo_session", log::LogLevelFilter::Error)
+            .level(LevelFilter::Error)
+            .level_for("gotham", log::LevelFilter::Trace)
+            .level_for("gotham::state", log::LevelFilter::Error)
+            .level_for("todo_session", log::LevelFilter::Error)
             .chain(io::stdout())
             .format(|out, message, record| {
                 out.finish(format_args!(
