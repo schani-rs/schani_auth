@@ -5,8 +5,9 @@ rust:
   - nightly
 matrix:
   allow_failures:
-    - rust: beta
-    - rust: nightly
+    - rust:
+      - beta
+      - nightly
 
 branches:
   only:
